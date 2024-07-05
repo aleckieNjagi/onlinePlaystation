@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hangman Game</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        text-align: center;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .word {
+        font-size: 36px;
+        margin-bottom: 20px;
+        letter-spacing: 10px;
+    }
+
+    .letters {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .letter {
+        margin: 5px;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 10px 20px;
+        background-color: #eee;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .letter:hover {
+        background-color: #ddd;
+        transform: translateY(-2px);
+    }
+
+    .result {
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 20px;
+        color: #333;
+    }
+
+    .hangman-image {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .hangman-image img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    @media (max-width: 600px) {
+        .letter {
+            font-size: 20px;
+            padding: 8px 16px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Hangman Game</h1>
+
+    <div class="word" id="word"></div>
+
+    <div class="letters" id="letters"></div>
+
+    <div class="result" id="result"></div>
+
+    <div class="hangman-image" id="hangmanImage">
+        <img src="pic/hangman.jpeg" alt="Hangman Image">
+    </div>
+    <div><a href="index.html">more games</a></div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const words = ['JAVASCRIPT', 'PYTHON', 'HTML', 'CSS', 'NODEJS', 'REACT', 'ANGULAR', 'PHP'];
+        let selectedWord = words[Math.floor(Math.random() * words.length)];
+        let guessedLetters = [];
+        let remainingAttempts = 6;
+
+        const wordDiv = document.getElementById('word');
+        const lettersDiv = document.getElementById('letters');
+        const resultDiv = document.getElementById('result');
+        const hangmanImage = document.getElementById('hangmanImage').querySelector('img');
+
+        // Initialize word display with underscores
+        let wordDisplay = Array.from(selectedWord).map(() => '_').join(' ');
+        wordDiv.textContent = wordDisplay;
+
+        // Generate alphabet buttons
+        for (let i = 65; i <= 90; i++) {
+            const letter = String.fromCharCode(i);
+            const letterButton = document.createElement('button');
+            letterButton.textContent = letter;
+            letterButton.classList.add('letter');
+            letterButton.addEventListener('click', function () {
+                guessLetter(letter);
+                this.disabled = true;
+                this.style.cursor = 'default';
+            });
+            lettersDiv.appendChild(letterButton);
+        }
+
+        function guessLetter(letter) {
+            if (remainingAttempts > 0 && !guessedLetters.includes(letter)) {
+                guessedLetters.push(letter);
+
+                if (selectedWord.includes(letter)) {
+                    updateWordDisplay();
+                } else {
+                    remainingAttempts--;
+                    updateHangman();
+                }
+
+                checkGameStatus();
+            }
+        }
+
+        function updateWordDisplay() {
+            wordDisplay = Array.from(selectedWord).map(char => guessedLetters.includes(char) ? char : '_').join(' ');
+            wordDiv.textContent = wordDisplay;
+        }
+
+        function updateHangman() {
+            if (remainingAttempts === 0) {
+                resultDiv.textContent = `Game Over! The word was "${selectedWord}".`;
+            } else {
+                resultDiv.textContent = `Incorrect guess! ${remainingAttempts} attempts remaining.`;
+            }
+            
+        }
+
+        function checkGameStatus() {
+            if (!wordDisplay.includes('_')) {
+                resultDiv.textContent = `Congratulations! You guessed the word "${selectedWord}"!`;
+                disableAllLetters();
+            }
+        }
+
+        function disableAllLetters() {
+            const letterButtons = document.querySelectorAll('.letter');
+            letterButtons.forEach(button => {
+                button.disabled = true;
+                button.style.cursor = 'default';
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
+

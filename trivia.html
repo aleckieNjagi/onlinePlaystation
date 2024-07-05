@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netrapidster Trivia Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #quiz {
+      margin-top: 20px;
+    }
+
+    #options {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #score {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>NetRapidster Trivia Quiz</h1>
+    <label for="topic">Select a topic:</label>
+    <select id="topic">
+      <option value="general">General knowledge</option>
+      <option value="science">Science</option>
+      <option value="technology">Technology</option>
+      <option value="history">World History</option>
+      <option value="sports">Sports</option>
+      <option value="maths">Mathematics</option>
+    </select>
+    <br>
+    <label for="numQuestions">Number of Questions:</label>
+    <input type="number" id="numQuestions" value="3" min="1" max="5">
+    <br><br>
+    <button onclick="startQuiz()">Start Quiz</button>
+    <div id="quiz" style="display: none;">
+      <h2 id="question"></h2>
+      <div id="options"></div>
+      <button onclick="nextQuestion()">Next Question</button>
+    </div>
+    <div id="score" style="display: none;"></div><hr><hr>
+    <div>
+  <a href="index.html">More games</a>
+  </div>
+  <script>
+    const questions = {
+      science: [
+        { question: "What is the chemical symbol for the element Gold?", options: ["Au", "Ag", "Fe","Pb"], answer: 1 },
+        { question: " Which of these is not a type of cloud?", options: ["Stratus", "Cirrus", "Equinox","Cumulus"], answer: 2 },
+        { question: " Which planet is known as the Red Planet?", options: ["Mars", "Venus", "Jupiter","Saturn"], answer: 0 },
+        { question: "What causes tides in the oceans?", options: ["Earth's rotation", "Gravitational pull of the Moon and Sun", "Solar flares","Wind patterns"], answer: 1 },
+        { question: "Which of the following is a greenhouse gas?", options: ["Oxygen", "Nitrogen", "Carbon dioxide","Argon"], answer: 2 },
+        { question: "What type of energy is stored in the nucleus of an atom?", options: ["Kinetic energy", "Potential energy", "Nuclear energy","Chemical energy"], answer: 2 },
+        { question: " Which scientist is credited with the theory of relativity?", options: [" Isaac Newton", "Albert Einstein", "Marie Curie","Charles Darwin"], answer: 1 },
+        { question: "What process do plants use to convert sunlight into energy?", options: ["Respiration", " Photosynthesis", "Digestion"," Combustion"], answer: 1 },
+        { question: " What is the hardest natural substance on Earth?", options: ["Iron", "Diamond", " Quartz","Titanium"], answer: 1 },
+        { question: "What is the largest organ in the human body?", options: ["Liver", "Skin", "Brain","Heart"], answer: 1 },
+        { question: "What is the largest organ in the human body?", options: ["Liver", "Skin", "Brain","Heart"], answer: 1 }
+      ],
+      general: [
+        { question: " Which planet is known as the Morning Star and Evening Star?", options: ["Mercury", "Venus", "Jupiter","Mars"], answer: 0 },
+        { question: "Who painted the Mona Lisa?", options: ["Vincent van Gogh", "Leonardo da Vinci", "Pablo Picasso","Michelangelo"], answer: 1 },
+        { question: "Which ocean is the largest by surface area?", options: ["Indian Ocean", "Atlantic Ocean", "Pacific Ocean","Arctic Ocean"], answer: 2 },
+        { question: " In Greek mythology, who is the goddess of wisdom?", options: ["Aphrodite", "Athena", "Hera"," Artemis"], answer: 1 },
+        { question: "What is the capital city of Australia?", options: ["Sydney", "Melbourne", " Canberra","Brisbane"], answer: 2 },
+        { question: "Which novel by George Orwell is a dystopian critique of totalitarianism?", options: ["Brave New World", " 1984", "Fahrenheit 451","Animal Farm"], answer: 1 },
+        { question: " Who wrote the play Romeo and Juliet?", options: ["William Shakespeare", " Charles Dickens", "Jane Austen","Mark Twain"], answer: 0 },
+        { question: "What is the national animal of China?", options: ["Giant Panda", "Dragon", " Red-crowned Crane","Siberian Tiger"], answer: 0 },
+        { question: "Which country hosted the first modern Olympic Games in 1896?", options: ["France", "Greece", " United States","Germany"], answer: 1 },
+        { question: " What is the smallest bone in the human body?", options: ["Stapes (in the ear)", "Patella (kneecap)", " Metacarpal","Femur"], answer: 0 }
+      ],
+      technology: [
+        { question: "Who is credited with inventing the World Wide Web (WWW)?", options: ["Tim Cook", "Bill Gates", "Steve Jobs","Tim Berners-Lee"], answer: 3 },
+        { question: "Which company developed the first commercially successful personal computer?", options: ["IBM", "Apple", "Microsoft"," Intel"], answer: 0 },
+        { question: " What does the abbreviation PDF stand for?", options: ["Portable Document Format", "Personal Data File", "Print Document File"," Pixelated Digital Form"], answer: 0 },
+        { question: "Which of these social media platforms was launched first?", options: [" Twitter", "Instagram", " LinkedIn","Facebook"], answer: 3 },
+        { question: " What type of device is a Raspberry Pi?", options: ["Single-board computer", "Gaming console", "  Virtual reality headset","Fitness tracker"], answer: 0 },
+        { question: "Which programming language is often used for artificial intelligence and machine learning applications", options: ["Python", "Java", "C++"," Ruby"], answer: 0 },
+        { question: "What is the name of Google's mobile operating system?", options: ["iOS", "Windows Mobile", " Android","BlackBerry OS"], answer: 1 },
+        { question: " Which technology company is known for its line of gaming consoles, including PlayStation?", options: ["Microsoft", "Nintendo", " Sega","Sony"], answer: 3 },
+        { question: "What does HTTP stand for in relation to internet browsing?", options: ["Hyperlink Transfer Protocol", "HyperText Transfer Protocol", " High Transmission Protocol","Host Target Transfer Protocol"], answer: 1 },
+        { question: "What is the name of Apple's intelligent personal assistant?", options: ["Alexa", "Siri", " Cortana","Google Assistant"], answer: 1 },
+        { question: "What does URL stand for in the context of web browsing?", options: ["Universal Routing Label", "Uniform Resource Locator", "User Relationship Link","Unified Resource Listing"], answer: 1 }
+      ],
+      history: [
+      { question: "Which ancient civilization built the Great Pyramids of Giza?", options: ["Mesopotamians", "Egyptians", "  Greeks","Romans"], answer: 1 },
+      { question: "Who was the first Emperor of Rome?", options: ["Julius Caesar", "Augustus", " Nero","Constantine"], answer: 1 },
+      { question: "The Magna Carta, signed in 1215, was a significant document in the history of which country?", options: ["France", "Spain", " Germany"," England"], answer: 3 },
+      { question: "The Renaissance, a period of cultural rebirth in Europe, originated in which present-day country?", options: ["Italy", " France", " Germany","Spain"], answer: 0 },
+      { question: "Who was the last tsar of Russia, whose reign ended with the Russian Revolution of 1917?", options: ["Peter the Great", "Nicholas II", " Ivan the Terrible","Alexander II"], answer: 1 },
+      { question: "The Treaty of Versailles, signed in 1919, formally ended which war?", options: [" World War I", "World War II", " Cold War","Napoleonic Wars"], answer: 0 },
+      { question: " Who was the first President of the United States?", options: ["Thomas Jefferson", "John Adams", "  George Washington","James Madison"], answer: 2 },
+      { question: " Which European explorer is credited with discovering the sea route from Europe to India, thus initiating the Age of Exploration?", options: ["Christopher Columbus", "Ferdinand Magellan", " Vasco da Gama","Marco Polo"], answer: 2 },
+      { question: " The Industrial Revolution began in which country in the late 18th century?", options: ["United States", "France", "  Germany","United Kingdom"], answer: 3 },
+      { question: "The Declaration of Independence of the United States was adopted in which year?", options: ["1776", " 1789", " 1804","1812"], answer: 0 }
+      ],
+      sports: [
+      { question: "Who is the all-time leading goalscorer in men's international soccer (football)?", options: ["Cristiano Ronaldo", "Lionel Messi", " Pele","Diego Maradona"], answer: 0 },
+      { question: "Which sport is associated with Wimbledon, the oldest tennis tournament in the world?", options: ["Golf", "Tennis", " Cricket","Soccer"], answer: 1 },
+      { question: " In which city were the inaugural modern Olympic Games held in 1896?", options: ["Paris", " Athens", "London","Rome"], answer: 1 },
+      { question: "Who has won the most Formula 1 World Championships as of 2024?", options: [" Ayrton Senna", "Sebastian Vettel", "  Michael Schumacher","Lewis Hamilton"], answer: 3 },
+      { question: "In American football, how many points is a touchdown worth?", options: ["3", "4", " 6","7"], answer: 2 },
+      { question: "Which country won the FIFA World Cup in 2018?", options: ["Brazil", " France", " Germany"," Argentina"], answer: 1 },
+      { question: "In which city were the 2008 Summer Olympics held?", options: [" Sydney", "Beijing", "London","Rio de Janeiro"], answer: 1 },
+      { question: "What is the official ball used in a game of volleyball?", options: ["Shuttlecock", "Football", " Volleyball"," Baseball"], answer: 3 },
+      { question: "Which of these is not a Grand Slam tennis tournament?", options: ["Wimbledon", "US Open", " Davis Cup","French Open"], answer: 2 },
+      { question: "In which sport would you perform a slam dunk?", options: ["Tennis", "Basketball", "Golf"," Swimming"], answer: 1 }
+      ],
+      maths: [
+      { question: "Which of the following is a prime number?", options: ["12", "17", "28"," 35"], answer: 1 },
+      { question: "What is the area of a rectangle with length 6 cm and width 4 cm?", options: ["20cm", "24cm", "28cm"," 16cm"], answer: 1 },
+      { question: "What is the perimeter of a triangle with sides measuring 5 cm, 7 cm, and 9 cm?", options: ["18", "21", "23"," 25"], answer: 2 },
+      { question: "What is the next number in the sequence: 1, 4, 9, 16, ... ?", options: ["24", "25", "36"," 49"], answer: 1 },
+      { question: "What is the square root of 144?", options: ["10", "12", "14"," 16"], answer: 1 }
+      ]
+    };
+
+    let currentTopic = "";
+    let questionsPerQuiz = 3; // Default number of questions per quiz
+    let currentQuestion = 0;
+    let score = 0;
+
+    function startQuiz() {
+      const topic = document.getElementById("topic").value;
+      currentTopic = topic;
+      currentQuestion = 0;
+      score = 0;
+      questionsPerQuiz = parseInt(document.getElementById("numQuestions").value);
+      displayQuestion();
+      document.getElementById("quiz").style.display = "block";
+    }
+
+    function displayQuestion() {
+      const questionElement = document.getElementById("question");
+      const optionsElement = document.getElementById("options");
+      
+      questionElement.textContent = questions[currentTopic][currentQuestion].question;
+      optionsElement.innerHTML = "";
+      
+      for (let i = 0; i < questions[currentTopic][currentQuestion].options.length; i++) {
+        const option = document.createElement("button");
+        option.textContent = questions[currentTopic][currentQuestion].options[i];
+        option.onclick = function() { checkAnswer(i); };
+        optionsElement.appendChild(option);
+      }
+    }
+
+    function checkAnswer(answerIndex) {
+      if (answerIndex === questions[currentTopic][currentQuestion].answer) {
+        score++;
+      }
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questionsPerQuiz && currentQuestion < questions[currentTopic].length) {
+        displayQuestion();
+      } else {
+        endQuiz();
+      }
+    }
+
+    function endQuiz() {
+      document.getElementById("quiz").style.display = "none";
+      document.getElementById("score").style.display = "block";
+      document.getElementById("score").textContent = `Quiz ended! You scored ${score} out of ${questionsPerQuiz}`;
+    }
+  </script>
+</body>
+</html>
+
+

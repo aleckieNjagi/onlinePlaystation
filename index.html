@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choose Your Game</title>
+  <style>
+    /* Reset styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Global styles */
+    body {
+      background-image: url('pic/logo1.jpeg'); 
+        background-size: cover;
+        background-attachment: fixed;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f0f0f0;
+      color: #333;
+    }
+
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    nav ul {
+      list-style-type: none;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    nav ul li {
+      display: inline;
+      margin: 0 10px;
+    }
+
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 5px 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      background-color: #555;
+      border-radius: 5px;
+    }
+
+    .section {
+      padding: 50px 0;
+      text-align: center;
+    }
+
+    .section h2 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #007bff;
+    }
+
+    .section p {
+      font-size: 1.1em;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .game {
+      background-color: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: left;
+      transition: transform 0.3s ease;
+      /* Background image */
+      background-size: cover;
+      background-position: center;
+      min-height: 300px; /* Adjust as needed */
+    }
+
+    .game:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .game h3 {
+      font-size: 2em;
+      margin-bottom: 10px;
+      color: #007bff;
+    }
+
+    .game p {
+      margin-bottom: 10px;
+    }
+
+    .search-container {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .search-container input[type=text] {
+      padding: 10px;
+      width: 30%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .search-container input[type=text]:focus {
+      width: 50%;
+    }
+
+    .footer {
+      background-color: #333;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .footer nav ul {
+      margin-top: 10px;
+    }
+
+    .footer nav ul li {
+      display: inline;
+      margin: 0 10px;
+    }
+
+    .footer nav ul li a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .container {
+        width: 90%;
+      }
+
+      header {
+        padding: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>NetRapidster Online Playstation</h1>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#games">Games</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section id="home" class="section">
+    <div class="container">
+      <div class="search-container">
+        <input type="text" id="searchInput" onkeyup="filterGames()" placeholder="Search for games...">
+      </div>
+      <h2>Choose Your Game</h2>
+      <div class="game" style="background-image: url('pic/trivia.jpeg');">
+        <h3>Multiple choice trivia</h3>
+        <p>Multiple choice trivia involves answering questions by selecting from a set of provided options, testing knowledge across various subjects in a structured and interactive format.</p>
+        <a href="trivia.html" class="btn">Play Now</a>
+      </div>
+      <div class="game" style="background-image: url('pic/tac.jpeg');">
+        <h3>Tic Tac Toe</h3>
+        <p>Tic Tac Toe is a classic paper-and-pencil game where two players take turns marking Xs and Os on a 3x3 grid, aiming to get three in a row horizontally, vertically, or diagonally to win. It's simple yet strategic, often enjoyed for its quick gameplay and competitive edge.</p>
+        <a href="gametic.html" class="btn">Play Now</a>
+      </div>
+      <div class="game" style="background-image: url('pic/snake.jpeg');">
+        <h3>Snake</h3>
+        <p>Snake is a classic arcade game where players control a growing snake, maneuvering it to eat food while avoiding collisions with its own tail or walls. It challenges players' reflexes and strategy as the snake grows longer with each meal consumed.</p>
+        <a href="snake.html" class="btn">Play Now</a>
+      </div>
+      <div class="game" style="background-image: url('pic/text.jpeg');">
+        <h3>Text Adventure</h3>
+        <p>A text adventure game is an interactive narrative experience where players navigate through a story by making choices that shape the outcome, all through text-based prompts and responses.</p>
+        <a href="defense.html" class="btn">Play Now</a>
+      </div>
+      <div class="game" style="background-image: url('pic/hangman.jpeg');">
+        <h3>Hang Man</h3>
+        <p>A word-guessing game where players solve a hidden word by guessing its letters before making too many incorrect attempts.</p>
+        <a href="hangman.html" class="btn">Play Now</a>
+      </div>
+      <div class="game" style="background-image: url('pic/fruit.png');">
+        <h3>Match the fruits</h3>
+        <p>Test your recall by flipping cards to match pairs of colorful fruits hidden on a grid, perfect for sharpening memory skills while enjoying fruity fun.</p>
+        <a href="memory.html" class="btn">Play Now</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <div class="container">
+      <h2>About Us</h2>
+      <p>Welcome to Net Rapidster online playstation, where passion meets play! Dive into a world of immersive gaming experiences, discover new adventures, and connect with a vibrant community of gamers. Whether you're a seasoned player or just starting out, find your next favorite game and unleash your gaming prowess with us.</p>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="container">
+      <h2>Contact Us</h2>
+      <p>If you have any questions or need assistance, feel free to contact us:</p>
+      <p>Email: <a href="mailto:alexmutugi002@yahoo.com">alexmutugi002@yahoo.com</a></p>
+      <p>Phone: +254768231331</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 Online Games. All rights reserved.</p>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#games">Games</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    function filterGames() {
+      // Declare variables
+      var input, filter, games, game, title, i, txtValue;
+      input = document.getElementById('searchInput');
+      filter = input.value.toUpperCase();
+      games = document.getElementsByClassName('game');
+
+      // Loop through all games, and hide those that don't match the search query
+      for (i = 0; i < games.length; i++) {
+        game = games[i];
+        title = game.getElementsByTagName('h3')[0];
+        txtValue = title.textContent || title.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          game.style.display = '';
+        } else {
+          game.style.display = 'none';
+        }
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+

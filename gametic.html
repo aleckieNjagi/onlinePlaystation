@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic-Tac-Toe Game</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        text-align: center;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .board {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: repeat(3, 100px);
+        gap: 2px;
+        margin-top: 20px;
+    }
+
+    .square {
+        background-color: #3498DB;
+        color: white;
+        font-size: 48px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .square:hover {
+        background-color: #2980B9;
+    }
+
+    .message {
+        font-size: 24px;
+        font-weight: bold;
+        margin-top: 20px;
+        color: #333;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Tic-Tac-Toe Game</h1>
+
+    <div class="board" id="board">
+        <div class="square" onclick="makeMove(0)"></div>
+        <div class="square" onclick="makeMove(1)"></div>
+        <div class="square" onclick="makeMove(2)"></div>
+        <div class="square" onclick="makeMove(3)"></div>
+        <div class="square" onclick="makeMove(4)"></div>
+        <div class="square" onclick="makeMove(5)"></div>
+        <div class="square" onclick="makeMove(6)"></div>
+        <div class="square" onclick="makeMove(7)"></div>
+        <div class="square" onclick="makeMove(8)"></div>
+    </div>
+
+    <div class="message" id="message"></div><hr>
+    <div><a href="index.html">more games</a></div>
+</div>
+
+<script>
+    const board = document.getElementById('board');
+    const squares = document.querySelectorAll('.square');
+    const messageDisplay = document.getElementById('message');
+
+    let currentPlayer = 'X';
+    let moves = 0;
+    let gameActive = true;
+    let boardState = ['', '', '', '', '', '', '', '', ''];
+
+    const winPatterns = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
+    function makeMove(index) {
+        if (!gameActive || boardState[index] !== '') return;
+
+        boardState[index] = currentPlayer;
+        squares[index].textContent = currentPlayer;
+        moves++;
+
+        checkForWin();
+        checkForDraw();
+
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    }
+
+    function checkForWin() {
+        for (let pattern of winPatterns) {
+            let [a, b, c] = pattern;
+            if (boardState[a] !== '' && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+                gameActive = false;
+                highlightWin(pattern);
+                messageDisplay.textContent = `${currentPlayer} wins!`;
+                return;
+            }
+        }
+    }
+
+    function highlightWin(pattern) {
+        let [a, b, c] = pattern;
+        squares[a].style.backgroundColor = '#2ECC71';
+        squares[b].style.backgroundColor = '#2ECC71';
+        squares[c].style.backgroundColor = '#2ECC71';
+    }
+
+    function checkForDraw() {
+        if (moves === 9 && gameActive) {
+            gameActive = false;
+            messageDisplay.textContent = "It's a draw!";
+        }
+    }
+
+    function restartGame() {
+        currentPlayer = 'X';
+        moves = 0;
+        gameActive = true;
+        boardState = ['', '', '', '', '', '', '', '', ''];
+
+        squares.forEach(square => {
+            square.textContent = '';
+            square.style.backgroundColor = '#3498DB';
+        });
+
+        messageDisplay.textContent = '';
+    }
+</script>
+
+</body>
+</html>
+
+
+

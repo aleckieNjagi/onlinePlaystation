@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Text Adventure Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .game-container {
+            text-align: center;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #story {
+            margin-bottom: 20px;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div id="story">
+            Welcome to the Enhanced Text Adventure Game!<br>
+            You wake up in a strange forest. What do you do?
+        </div>
+        <div class="btn-container">
+            <button class="btn" id="option1Btn" onclick="chooseOption(1)">Explore</button>
+            <button class="btn" id="option2Btn" onclick="chooseOption(2)">Rest</button>
+            <button class="btn" id="restartBtn" onclick="restartGame()">Restart</button>
+            <button class="btn" id="homeBtn" onclick="backToHome()">Back to Home</button>
+        </div><hr>
+        <div><a href="index.html">more games</a></div>
+    </div>
+
+    <script>
+        let currentScene = 0; // Initial scene index
+        let gameRunning = true; // Game state
+        let inventory = []; // Player's inventory
+
+        const storyElement = document.getElementById('story');
+        const option1Btn = document.getElementById('option1Btn');
+        const option2Btn = document.getElementById('option2Btn');
+        const restartBtn = document.getElementById('restartBtn');
+        const homeBtn = document.getElementById('homeBtn');
+
+        // Array of scenes with text and options
+        const scenes = [
+            {
+                text: "You wake up in a strange forest. What do you do?",
+                options: ["Explore further", "Rest under a tree"],
+                nextScenes: [1, 2]
+            },
+            {
+                text: "As you explore, you find an abandoned cabin. What do you do?",
+                options: ["Enter the cabin", "Continue exploring the forest"],
+                nextScenes: [3, 4]
+            },
+            {
+                text: "You decide to rest under a tree and regain your strength.",
+                options: ["Continue exploring", "Rest again"],
+                nextScenes: [4, 5]
+            },
+            {
+                text: "Inside the cabin, you find a locked chest. What do you do?",
+                options: ["Try to open the chest", "Leave the cabin and continue exploring"],
+                nextScenes: [6, 4]
+            },
+            {
+                text: "You find an ancient map that leads to a hidden treasure!",
+                options: ["Follow the map", "Ignore the map and explore other areas"],
+                nextScenes: [7, 8]
+            },
+            {
+                text: "You stumble upon a friendly merchant. He offers to trade items with you.",
+                options: ["Trade with the merchant", "Decline and continue exploring"],
+                nextScenes: [9, 8]
+            },
+            {
+                text: "You successfully open the chest and find a magical amulet inside.",
+                options: ["Take the amulet", "Leave it and continue exploring"],
+                nextScenes: [10, 4]
+            },
+            {
+                text: "Following the map, you discover a hidden cave with treasures beyond your imagination.",
+                options: ["Explore the cave", "Leave the cave and continue exploring"],
+                nextScenes: [11, 8]
+            },
+            {
+                text: "You encounter a band of thieves. What do you do?",
+                options: ["Fight the thieves", "Try to negotiate with them"],
+                nextScenes: [12, 13]
+            },
+            {
+                text: "You trade with the merchant and acquire a powerful sword.",
+                options: ["Continue exploring", "Rest"],
+                nextScenes: [4, 5],
+                addItemToInventory: "Sword"
+            },
+            {
+                text: "You take the magical amulet and feel its protective aura.",
+                options: ["Continue exploring", "Rest"],
+                nextScenes: [4, 5],
+                addItemToInventory: "Amulet"
+            },
+            {
+                text: "You defeat the thieves and gain their stolen treasures.",
+                options: ["Explore further", "Rest"],
+                nextScenes: [4, 5],
+                addItemToInventory: "Stolen Treasures"
+            },
+            {
+                text: "You negotiate with the thieves and strike a deal. They share their loot with you.",
+                options: ["Explore further", "Rest"],
+                nextScenes: [4, 5],
+                addItemToInventory: "Thieves' Loot"
+            },
+            {
+                text: "Unfortunately, negotiations fail and you are forced to flee the thieves.",
+                options: ["Try again", "Quit"],
+                nextScenes: [8, -1] // -1 indicates game over
+            },
+            {
+                text: "You find a peaceful village and decide to settle down.",
+                options: ["Start a new life", "Continue exploring"],
+                nextScenes: [-1, 4] // -1 indicates game ending
+            }
+        ];
+
+        // Function to display the current scene
+        function displayScene(sceneIndex) {
+            const scene = scenes[sceneIndex];
+            storyElement.innerHTML = scene.text;
+            option1Btn.textContent = scene.options[0];
+            option2Btn.textContent = scene.options[1];
+        }
+
+        // Function to handle player's choice
+        function chooseOption(optionIndex) {
+            if (!gameRunning) return;
+
+            const scene = scenes[currentScene];
+            const nextSceneIndex = scene.nextScenes[optionIndex - 1];
+            const nextScene = scenes[nextSceneIndex];
+
+            if (nextSceneIndex === -1) {
+                if (nextScene.text.includes("Start a new life")) {
+                    storyElement.innerHTML = "Congratulations! You have successfully completed your adventure.";
+                } else {
+                    gameOver();
+                }
+                return;
+            }
+
+            currentScene = nextSceneIndex;
+            if (nextScene.addItemToInventory) {
+                addToInventory(nextScene.addItemToInventory);
+            }
+            displayScene(currentScene);
+        }
+
+        // Function to add an item to the inventory
+        function addToInventory(item) {
+            inventory.push(item);
+            console.log(`Added ${item} to inventory.`);
+        }
+
+        // Function to restart the game
+        function restartGame() {
+            gameRunning = true;
+            currentScene = 0;
+            inventory = [];
+            displayScene(currentScene);
+        }
+
+        // Function to go back to home (reset game state)
+        function backToHome() {
+            gameRunning = false;
+            currentScene = 0;
+            inventory = [];
+            storyElement.innerHTML = "Welcome to the Enhanced Text Adventure Game!<br>You wake up in a strange forest. What do you do?";
+            option1Btn.textContent = "Explore";
+            option2Btn.textContent = "Rest";
+        }
+
+        // Initial display of the first scene
+        displayScene(currentScene);
+    </script>
+</body>
+</html>
+
+
+
+
+
+
